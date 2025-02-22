@@ -1,0 +1,2 @@
+lat,lon,image_url,comment
+35.689184828742285,139.6916480913099,"https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.689184828742285,139.6916480913099&key=YOUR_API_KEY",ここにある

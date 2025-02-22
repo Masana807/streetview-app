@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ストリートビュー報告アプリ</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        #map, #street-view {
+            width: 45%;
+            height: 400px;
+            background-color: lightgray;
+        }
+        #report-form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ストリートビュー報告アプリ</h1>
+
+    <div id="container">
+        <div id="map"></div>
+        <div id="street-view"></div>
+    </div>
+
+    <form id="report-form" onsubmit="submitReport(event)">
+        <label for="lat">緯度:</label>
+        <input type="text" id="lat" readonly>
+
+        <label for="lng">経度:</label>
+        <input type="text" id="lng" readonly>
+
+        <label for="comment">コメント:</label>
+        <input type="text" id="comment" required>
+
+        <button type="submit">報告する</button>
+    </form>
+
+    <script>
+        let map, panorama;
+
+        function initMap() {
+            console.log("initMap() が実行されました！");
+
+            const location = { lat: 35.6895, lng: 139.6917 };
+
+            // 地図の作成
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: location,
+                zoom: 15,
+            });
+
+            // ストリートビューの作成
+            panorama = new google.maps.StreetViewPanorama(
+                document.getElementById("street-view"),
+                {
+                    position: location,
+                    pov: { heading: 165, pitch: 0 },
+                    zoom: 1
+                }
+            );
+
+            // 地図とストリートビューを連携
+            map.setStreetView(panorama);
+
+            // ストリートビューの座標変更時にフォームへ反映
+            panorama.addListener("position_changed", () => {
+                const position = panorama.getPosition();
+                if (position) {
+                    console.log("ストリートビューの位置:", position.lat(), position.lng());
+                    document.getElementById("lat").value = position.lat();
+                    document.getElementById("lng").value = position.lng();
+                }
+            });
+
+            // 追加: 過去の報告を読み込む
+            loadReports();
+        }
+
+        function submitReport(event) {
+            event.preventDefault();
+
+            const lat = document.getElementById("lat").value;
+            const lon = document.getElementById("lng").value;
+            const comment = document.getElementById("comment").value;
+
+            if (!lat || !lon || !comment) {
+                alert("全ての項目を入力してください！");
+                return;
+            }
+
+            const apiKey = "AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA";  // ここにGoogle MapsのAPIキーを入力
+            const imageUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${lat},${lon}&key=${apiKey}`;
+
+            fetch("/report", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ lat, lon, imageUrl, comment })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("エラー: " + data.error);
+                } else {
+                    alert("報告が送信されました！");
+
+                    // マップに新しいマーカーを追加
+                    addMarker({ lat: parseFloat(lat), lon: parseFloat(lon), imageUrl, comment });
+                }
+            })
+            .catch(error => console.error("エラー:", error));
+        }
+
+        function loadReports() {
+            fetch('/reports')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(report => addMarker(report));
+                })
+                .catch(error => console.error("エラー:", error));
+        }
+
+        function addMarker(report) {
+            const marker = new google.maps.Marker({
+                position: { lat: parseFloat(report.lat), lng: parseFloat(report.lon) },
+                map: map
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<p>${report.comment}</p><img src="${report.imageUrl}" width="200">`
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+        }
+
+        // ウィンドウが完全に読み込まれたら initMap() を実行
+        window.onload = () => {
+            console.log("window.onload で initMap() を実行します");
+            initMap();
+        };
+    </script>
+
+    <!-- Google Maps API のスクリプト -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA&callback=initMap" defer></script>
+</body>
+</html>
