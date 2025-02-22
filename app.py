@@ -5,9 +5,8 @@ Created on Sat Feb 22 10:28:17 2025
 @author: masan
 """
 
-
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -17,6 +16,12 @@ CORS(app)  # CORSを有効化
 @app.route('/')
 def home():
     return "Street View App is running!"
+
+# favicon.ico を提供するルート
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 # 植生報告データを格納するリスト
 reports = []
