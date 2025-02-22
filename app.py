@@ -6,33 +6,37 @@ Created on Sat Feb 22 10:28:17 2025
 """
 
 
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # CORSを有効化
 
 # テスト用のルート
-@app.route("/")
+@app.route('/')
 def home():
-    return "ストリートビュー報告アプリへようこそ！"
+    return "Street View App is running!"
 
-# 地点報告のエンドポイント
+# 植生報告データを格納するリスト
 reports = []
 
-@app.route("/report", methods=["POST"])
-def report_location():
+# 植生報告のエンドポイント
+@app.route('/report', methods=['POST'])
+def report():
     data = request.json
-    if "lat" in data and "lng" in data and "description" in data:
-        reports.append(data)
-        return jsonify({"message": "報告が追加されました", "reports": reports}), 201
-    return jsonify({"error": "必要な情報が不足しています"}), 400
+    if not data or 'latitude' not in data or 'longitude' not in data or 'description' not in data:
+        return jsonify({"error": "Invalid request"}), 400
+    
+    reports.append(data)
+    return jsonify({"message": "Report received", "data": data}), 201
 
-@app.route("/reports", methods=["GET"])
+# すべての報告を取得
+@app.route('/reports', methods=['GET'])
 def get_reports():
-    return jsonify({"reports": reports})
+    return jsonify(reports)
 
-# Flaskアプリの起動設定
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
+# Render で適切なポートを使用する設定
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))  # 環境変数 PORT を取得（デフォルト 5000）
+    app.run(host='0.0.0.0', port=port, debug=True)
