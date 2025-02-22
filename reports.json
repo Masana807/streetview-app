@@ -1,20 +1,25 @@
 [
-    {
-        "lat": "35.68684303682683",
-        "lon": "139.6855810345513",
-        "imageUrl": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.68684303682683,139.6855810345513&key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA",
-        "comment": "\u3053\u3053\u306b\u3042\u308b"
-    },
-    {
-        "lat": "35.68792761502741",
-        "lon": "139.68299808189724",
-        "imageUrl": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.68792761502741,139.68299808189724&key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA",
-        "comment": "\u3053\u3053\u306b\u3042\u308b"
-    },
-    {
-        "lat": "35.6877886379304",
-        "lon": "139.6786727730532",
-        "imageUrl": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.6877886379304,139.6786727730532&key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA",
-        "comment": "\u3053\u3053\u306b\u3042\u308b"
-    }
+  {
+    "lat": "35.68684303682683",
+    "lon": "139.6855810345513",
+    "imageUrl": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.68684303682683,139.6855810345513&key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA",
+    "comment": "ここにある"
+  },
+  {
+    "lat": "35.68792761502741",
+    "lon": "139.68299808189724",
+    "imageUrl": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.68792761502741,139.68299808189724&key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA",
+    "comment": "ここにある"
+  },
+  {
+    "lat": "35.6877886379304",
+    "lon": "139.6786727730532",
+    "imageUrl": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=35.6877886379304,139.6786727730532&key=AIzaSyBuqEY5mC0Dq4Mr4mjT1owrucGUh46roiA",
+    "comment": "ここにある"
+  },
+  {
+    "latitude": 35.6895,
+    "longitude": 139.6917,
+    "description": "Test plant in Tokyo"
+  }
 ]
