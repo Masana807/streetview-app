@@ -21,5 +21,10 @@
     "latitude": 35.6895,
     "longitude": 139.6917,
     "description": "Test plant in Tokyo"
+  },
+  {
+    "latitude": 35.6895,
+    "longitude": 139.6917,
+    "description": "テストの植物"
   }
 ]
